@@ -74,7 +74,7 @@ if __name__ == '__main__':
             print(process.stdout)
 
             if x < iterations:
-                time.sleep(30)
+                time.sleep(35)
 
     
 
