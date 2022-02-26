@@ -1,17 +1,26 @@
-import sys, subprocess, time
+import os
+import subprocess
 
+from airdrop import airdrop
+from splitcoins import splitcoins
 from argparse import ArgumentParser
 
-# Change this to the location of your binary
-chia_exe = "C:/Users/Mark/AppData/Local/chia-blockchain/app-1.2.12284/resources/app.asar.unpacked/daemon/chia.exe"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+CHIA_EXE = os.getenv('CHIA_EXE')
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument("cmd", type=str,
+    parser.add_argument("command", type=str,
                     help="the command you want to run. info or split-coins")
 
     parser.add_argument("-d", "--destination", dest="destination",
                         help="destination address")
+
+    parser.add_argument("-s", "--source",
+                        help="the source file to read from")
 
     parser.add_argument("-a", "--amount",
                         help="amount for each coin")
@@ -25,56 +34,32 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--iterations",
                         help="number of times to iterate the send")
 
+    parser.add_argument("-w", "--wallet",
+                        help="the wallet you want to send from. Get list of wallets using the 'wallet' command")
+
+    parser.add_argument("--start",
+                        help="what position should airdrop start")
+
+    parser.add_argument("--stop",
+                        help="what position should airdrop stop")
+
+
     args = parser.parse_args()
 
-    if args.cmd == "info":
-        process = subprocess.run([chia_exe, "version"], stdout=subprocess.PIPE, universal_newlines=True)
+    if args.command == "info":
+        process = subprocess.run([CHIA_EXE, "version"], stdout=subprocess.PIPE, universal_newlines=True)
+        print(process.stdout)
+
+    if args.command == "wallets":
+        process = subprocess.run([CHIA_EXE, "wallet", "show"], stdout=subprocess.PIPE, universal_newlines=True)
         print(process.stdout)
 
     # You can use this to split the coin into smaller coins
-    if args.cmd == "split-coins":
-        wallet_id = 1
+    if args.command == "split-coins":
+        splitcoins(CHIA_EXE, args)
 
-        if args.amount:
-            amount = args.amount
-        else:
-            print("Please specify the amount you want each coin split to")
-            sys.exit()
-
-        if args.memo:
-            memo = args.memo
-        else:
-            memo = "splitcoins"
-
-        if args.fee:
-            fee = args.fee
-        else:
-            fee = 0.0000001
-
-        if args.destination:
-            destination = args.destination
-        else:
-            print("No destination provided")
-            sys.exit()
-
-        if args.iterations:
-            iterations = int(args.iterations)
-        else:
-            iterations = 1
-
-        print("sending coins to : " + args.destination)
-
-        for x in range(iterations):
-            process = subprocess.run([chia_exe, "wallet", "send", 
-                                                "-i", str(wallet_id), 
-                                                "-a", str(amount),
-                                                "-e", memo,
-                                                "-m", str(fee),
-                                                "-t", destination], stdout=subprocess.PIPE, universal_newlines=True)
-            print(process.stdout)
-
-            if x < iterations:
-                time.sleep(35)
+    if args.command == "airdrop":
+        airdrop(CHIA_EXE, args)
 
     
 

@@ -1,6 +1,19 @@
 # xchtools
 My tools for doing Chia things
 
+# How to use
+- Rename .env.sample to .env and customize the variables
+- Run pip install -r requirements.txt
+- Use python main.py wallets to see all your wallets and get the wallet IDs. Your CATs are in different wallets from xch
+- Run python main.py split-coins to split coins
+- Run python main.py airdrop <filename> to airdrop tokens
+
+Take note: if you want to airdrop, it's best to split your CAT coins into multiple smaller coins first.
+
+# Airdropping XCH or Chia Tokens
+- Add a file called .airdrop.whatever.csv (this format will be git ignored)
+- One of the columns should contain the xch address. This will be detected automatically. The first address with xch is the airdrop target
+
 
 # Example
 
