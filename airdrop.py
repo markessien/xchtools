@@ -86,13 +86,15 @@ def airdrop(chia_exe, args):
                                                 "-m", str(fee),
                                                 "-t", addr], stdout=subprocess.PIPE, universal_newlines=True)
             print(process.stdout)
-            print("Airdropped to " + str(c+1))
-            fsent.write(addr + ",\n")
-            fsent.flush()
 
-            if c == 5:
-                break
-            time.sleep(10)
+            if "error" not in process.stdout:    
+                print("Airdropped to " + str(c+1))
+                fsent.write(addr + ",\n")
+                fsent.flush()
+            else:
+                print("Error airdropping to " + addr)
+
+            time.sleep(35)
         
         fsent.close()
 
