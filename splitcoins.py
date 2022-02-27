@@ -41,9 +41,12 @@ def splitcoins(chia_exe, args):
     # Added a tiny increment in the amount to be split. This is to avoid it just using
     # existing coins instead of taking the big one
     for x in range(iterations):
+        amnt = str(float(amount) + (fee*(x+1)))
+        print("Sending " + amnt + " to " + destination)
+        
         process = subprocess.run([chia_exe, "wallet", "send", 
                                             "-i", str(wallet_id), 
-                                            "-a", str(float(amount) + (fee*x)),
+                                            "-a", amnt,
                                             "-e", memo,
                                             "-m", str(fee),
                                             "-t", destination], stdout=subprocess.PIPE, universal_newlines=True)
