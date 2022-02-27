@@ -19,7 +19,12 @@ Take note: if you want to airdrop, it's best to split your CAT coins into multip
 
 Run it like this to split your coins
 
+#### XCH splitting example
 python main.py split-coins -d xch13379wurwsnkq35qdqyaz8gyvae2q8zuvxxzpschzstkedpsu3paqdxewlw -a 0.1 -i 10
+
+#### Token Splitting Example
+python main.py split-coins -d xch1pwrce750mycjaxf39p0yr682gzcjzmlsaxx65x0ue88r50vunq8sfs9e0z -a 110 -i 100
+
 
 -d = destination address, which should be yours
 

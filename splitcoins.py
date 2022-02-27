@@ -2,7 +2,12 @@
 import sys, subprocess, time
 
 def splitcoins(chia_exe, args):
-    wallet_id = 1
+    
+    if args.wallet:
+        wallet_id = args.wallet
+    else:
+        print("Please specify the wallet you want to send from. Use the 'wallets' command to get the list")
+        sys.exit()
 
     if args.amount:
         amount = args.amount
@@ -33,10 +38,12 @@ def splitcoins(chia_exe, args):
 
     print("sending coins to : " + args.destination)
 
+    # Added a tiny increment in the amount to be split. This is to avoid it just using
+    # existing coins instead of taking the big one
     for x in range(iterations):
         process = subprocess.run([chia_exe, "wallet", "send", 
                                             "-i", str(wallet_id), 
-                                            "-a", str(amount),
+                                            "-a", str(float(amount) + (fee*x)),
                                             "-e", memo,
                                             "-m", str(fee),
                                             "-t", destination], stdout=subprocess.PIPE, universal_newlines=True)
